@@ -1,4 +1,4 @@
-# ---------------------------------------
+# ---modified from original------------------------------------
 # Base image for node
 FROM node:20-bookworm-slim as node_base
 
@@ -8,7 +8,7 @@ FROM redis:7-bookworm as redis
 
 # ---------------------------------------
 # Dev environment
-FROM python:3.11-slim-bookworm as dev
+FROM ubuntu:jammy as dev
 
 # Set ENV
 WORKDIR /usr/src/app
@@ -17,7 +17,7 @@ ENV NODE_ENV='development'
 
 # Install dependencies
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends dumb-init
+    && apt-get install -y --no-install-recommends dumb-init && apt-get install -y libopenblas-dev && pip install --upgrade pip
 
 # Copy database, source code, and scripts
 COPY --from=redis /usr/local/bin/redis-server /usr/local/bin/redis-server
